@@ -1,0 +1,18 @@
+name: Tests Workflow
+
+on: [push]
+
+jobs:
+  build:
+    name: Autograding
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Prepare to tests
+        run: |
+          openssl enc -d -aes-256-ecb -in .github/tests.tar.gz -K 8CB83E10DEC9E3AC49DD1EF8F84D52E142A38DE054A4434DF69BC4EA34A458F1 -iter 7 | tar -xzf - -C ./src/
+          npm i
+          npx react-scripts start &
+      - name: Tests
+        run: |
+          CI=true npx react-scripts test
